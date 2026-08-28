@@ -1,0 +1,91 @@
+<html>
+	<head>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+		<style>
+			h1 {
+				text-align: center;
+			}
+
+			.container {
+				margin: 0 auto;
+				padding: 60px 20%;
+			}
+
+			figure {
+				text-align: center;
+			}
+
+			img {
+				display: inline-block;
+			}
+
+			body {
+				font-family: 'Inter', sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+		<h1>Project 0: Becoming Friends with Your Camera</h1>
+		<div style="text-align: center;">By: Stephane Finot</div>
+
+		<h2>Overview</h2>
+			<p>In this project, I explore the relationship between different perspectives and zooms to see the effect of different focal lengths.</p>
+
+			<h2>Part 1: Selfie: The Wrong Way vs. The Right Way</h2>
+			<p>Images taken from a further distance look more better because facial features are more proportional. 
+        When we view human faces, typically view them from a distance. 
+        For very distinct features, our eyes, nose, and mouths make up a central portion of our face. 
+        However, when you look from too close like with the wide angle lenses, the features begin to take over a majority of the sillouhette. 
+        We can also imagine when we look from too close, we are no longer able to see the ears of the subject, making a perspective that lacks fundamental
+        features of a human. </p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="images/task1.png" width="400px"/>
+				  <figcaption>Basic Triangles</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		
+		<h2>Task 2: Antialiasing by Supersampling</h2>
+			<p>For supersampling, I no longer sampled only once per pixel. Instead, I sampled smaller subpixels within each pixel of the frame buffer and stored that data in a larger sample buffer scaled by the sample rate. Within this larger sample buffer, I averaged the color values of the subpixels to determine the color of a full pixel in the original frame buffer.</p>
+			<p>Supersampling is useful because it depicts higher frequencies by allowing more samples to be represented in the rasterization. This helps reduce aliasing like the <q>jaggies</q> apparent in triangles (see Sample rate 1 image). If only a corner of a pixel is covered and only one sample is taken, it may not show in the frame buffer. With supersampling, the covered corner is represented by its weight in the average used to compute the pixel color. I increased the sample rate to get a smooth display in the triangles, as seen in the results.</p>
+			<p>One design decision I considered was scaling all the given data before performing calculations and triangle processing, but I determined that this method would be more inefficient and more difficult to use with other features.</p>
+
+			<p>Comparing difference sample rates:</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="images/task2_1sample.png" width="400px"/>
+							<figcaption>Sample rate 1</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/task2_4sample.png" width="400px"/>
+							<figcaption>Sample rate 4</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/task2_16sample.png" width="400px"/>
+							<figcaption>Sample rate 16</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<h2>Task 3: Transforms</h2>
+			With hierarchical transforms, I tried to make this cubeman wave at the viewer. Adding subtle bends and leaning makes the pose more natural.
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="images/my_robot.png" width="400px"/>
+							<figcaption>Robot</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
