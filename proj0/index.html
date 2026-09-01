@@ -45,45 +45,44 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="images/task1.png" width="400px"/>
-				  <figcaption>Basic Triangles</figcaption>
+				  <img src="images/t1_close.png" width="400px"/>
+				  <figcaption>Close-up View</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="images/t1_far.png" width="400px"/>
+				  <figcaption>Far View</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
 		
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-			<p>For supersampling, I no longer sampled only once per pixel. Instead, I sampled smaller subpixels within each pixel of the frame buffer and stored that data in a larger sample buffer scaled by the sample rate. Within this larger sample buffer, I averaged the color values of the subpixels to determine the color of a full pixel in the original frame buffer.</p>
-			<p>Supersampling is useful because it depicts higher frequencies by allowing more samples to be represented in the rasterization. This helps reduce aliasing like the <q>jaggies</q> apparent in triangles (see Sample rate 1 image). If only a corner of a pixel is covered and only one sample is taken, it may not show in the frame buffer. With supersampling, the covered corner is represented by its weight in the average used to compute the pixel color. I increased the sample rate to get a smooth display in the triangles, as seen in the results.</p>
-			<p>One design decision I considered was scaling all the given data before performing calculations and triangle processing, but I determined that this method would be more inefficient and more difficult to use with other features.</p>
+		<h2>Part 2: Architectural Perspective Compression</h2>
+			<p>The first picture taken far away looks flatter because the relative distance between the camera and is greater, causing the distance in the pillars to be relatively smaller than in the second picture.
+				 In the second picture, the camera is closer to the pillars, causing the distance between the pillars to be relatively larger and have more depth. </p>
 
 			<p>Comparing difference sample rates:</p>
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="images/task2_1sample.png" width="400px"/>
-							<figcaption>Sample rate 1</figcaption>
+							<img src="images/t2_far.png" width="400px"/>
+							<figcaption>Far image</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/task2_4sample.png" width="400px"/>
-							<figcaption>Sample rate 4</figcaption>
-						</td>
-						<td style="text-align: center;">
-							<img src="images/task2_16sample.png" width="400px"/>
-							<figcaption>Sample rate 16</figcaption>
+							<img src="images/t2_close.JPG" width="400px"/>
+							<figcaption>Close image</figcaption>
 						</td>
 					</tr>
 				</table>
 			</div>
 
-			<h2>Task 3: Transforms</h2>
-			With hierarchical transforms, I tried to make this cubeman wave at the viewer. Adding subtle bends and leaning makes the pose more natural.
+			<h2>Part 3: The Dolly Zoom</h2>
+			.
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="images/my_robot.png" width="400px"/>
+							<img src="images/t3.gif" width="400px"/>
 							<figcaption>Robot</figcaption>
 						</td>
 					</tr>
