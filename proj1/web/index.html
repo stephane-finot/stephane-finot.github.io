@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+		<style>
+			h1 {
+				text-align: center;
+			}
+
+			.container {
+				margin: 0 auto;
+				padding: 60px 20%;
+			}
+
+			figure {
+				text-align: center;
+			}
+
+			img {
+				display: inline-block;
+			}
+
+			body {
+				font-family: 'Inter', sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+		<h1>Project 1: Images of the Russian Empire -- Colorizing the Prokudin-Gorskii Photo Collection</h1>
+		<div style="text-align: center;">By: Stephane Finot</div>
+
+		<h2>Project Overview</h2>
+			<p>The images we work with in this project are comprised of gray-scale images representing the data captured by the camera for a specific color channel. 
+				The challenge arises when each of these color channel images were taking at slightly different times, which causes slight differences in the position of
+				the camera at the time of the image being taken. If you were to try stacking the images right away, it would be misaligned and the final image would 
+				contain chromatic aberations. Thus, we need some pre-processing to align the images so that the different channels will line up properly to create 
+				a final image that does not have chromatic aberations.</p>
+
+			<h2>Part 1: Single-scale Alignment</h2>
+			<p> A basic way to align the images is to use a single-scale approach in which we shift the entire color channels across a range of offsets and compute a difference metric
+				to determine which of the tested offsets have the best alignment. This metric can be computed in a few different ways, including using the L2 norm and Normalized Cross-Correlation.
+				L2 norm, or Euclidian Difference, measures the difference between each pixel value in the two images and sums the squared differences, and finally takes the square root of the sum.
+				Normalized Cross-Correlation normalizes both images to have zero mean and a variance of one, which ensures that different lighting conditions do not affect the
+				comparison method. Then, the metric is calculated by summing the pixel-wise products of the two images. In this project, I used NCC due to its reliability across different
+				lighting conditions.
+
+				To avoid calculations being skewed by the edges of the image, which may contain artifacts, I cropped the sides of the images before computing the difference metric.
+				Below are the results of single-scale alignment.
+			</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="images/singleACathedral.jpg" width="400px"/>
+				  <figcaption>Cathedral</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="images/singleAMonastery.jpg" width="400px"/>
+				  <figcaption>Monastery</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="images/singleATobolsk.jpg" width="400px"/>
+				  <figcaption>Tobolsk</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		
+		<h2>Part 2: Architectural Perspective Compression</h2>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="images/t2_far.JPG" width="400px"/>
+							<figcaption>Far image</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/t2_close.JPG" width="400px"/>
+							<figcaption>Close image</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<h2>Part 3: The Dolly Zoom</h2>
+			
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="images/t3.gif" width="400px"/>
+							<figcaption>Dolly Zoom</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
