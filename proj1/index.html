@@ -32,18 +32,19 @@
 
 		<h2>Project Overview</h2>
 			<p>The images we work with in this project are comprised of gray-scale images representing the data captured by the camera for a specific color channel. 
-				The challenge arises when each of these color channel images were taking at slightly different times, which causes slight differences in the position of
+				The challenge arises when each of these color channel images were taken at slightly different times, which causes slight differences in the position of
 				the camera at the time of the image being taken. If you were to try stacking the images right away, it would be misaligned and the final image would 
 				contain chromatic aberations. Thus, we need some pre-processing to align the images so that the different channels will line up properly to create 
 				a final image that does not have chromatic aberations.</p>
 
 			<h2>Part 1: Single-scale Alignment</h2>
-			<p> A basic way to align the images is to use a single-scale approach in which we shift the entire color channels across a range of offsets and compute a difference metric
+			<p> A basic way to align the images is to use a single-scale approach in which we shift the entire color channels across a range of offsets (+ or - 15 pixels)and compute a difference metric
 				to determine which of the tested offsets have the best alignment. This metric can be computed in a few different ways, including using the L2 norm and Normalized Cross-Correlation.
-				L2 norm, or Euclidian Difference, measures the difference between each pixel value in the two images and sums the squared differences, and finally takes the square root of the sum.
-				Normalized Cross-Correlation normalizes both images to have zero mean and a variance of one, which ensures that different lighting conditions do not affect the
-				comparison method. Then, the metric is calculated by summing the pixel-wise products of the two images. In this project, I used NCC due to its reliability across different
-				lighting conditions.
+				L2 norm, or Euclidean Difference, measures the difference between each pixel value in the two images and sums the squared differences, and finally takes the square root of the sum. The best 
+				alignment the L2 norm is the one that minimizes this calculated value. Normalized Cross-Correlation normalizes both images to have zero mean and a variance of one, which ensures that different lighting conditions do not affect the
+				comparison method. Then, the metric is calculated by summing the pixel-wise products of the two images. The calculated metric is the correlation between the two images, so higher calcualted values 
+				mean better alignment with NCC. In this project, I used NCC due to its reliability across different lighting conditions. For these images, the offsets calculated 
+				using NCC and L2 norm were identical, so I only present the results of NCC in this section.
 
 				To avoid calculations being skewed by the edges of the image, which may contain artifacts, I cropped the sides of the images before computing the difference metric.
 				Below are the results of single-scale alignment.
@@ -51,20 +52,35 @@
 
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
+				<tr>
 				<td style="text-align: center;">
-				  <img src="images/singleACathedral.jpg" width="400px"/>
-				  <figcaption>Cathedral</figcaption>
+				  <img src="images/noOffsetCathedral.jpg" width="400px"/>
+				  <figcaption>Cathedral with no alignment</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="images/singleAMonastery.jpg" width="400px"/>
-				  <figcaption>Monastery</figcaption>
+				  <img src="images/noOffsetMonastery.jpg" width="400px"/>
+				  <figcaption>Monastery with no alignment</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="images/singleATobolsk.jpg" width="400px"/>
-				  <figcaption>Tobolsk</figcaption>
+				  <img src="images/noOffsetTobolsk.jpg" width="400px"/>
+				  <figcaption>Tobolsk with no alignment</figcaption>
 				</td>
 			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="images/singleNCCCathedral.jpg" width="400px"/>
+				  <figcaption>Cathedral (g offset: (5,2), r offset: (12,3))</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="images/singleNCCMonastery.jpg" width="400px"/>
+				  <figcaption>Monastery (g offset: (-3,3), r offset: (3,2))</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="images/singleNCCTobolsk.jpg" width="400px"/>
+				  <figcaption>Tobolsk (g offset: (3,3), r offset: (6,3))</figcaption>
+				</td>
+			  </tr>
+			  
 			</table>
 		</div>
 		
