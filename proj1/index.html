@@ -38,16 +38,17 @@
 				a final image that does not have chromatic aberations.</p>
 
 			<h2>Part 1: Single-scale Alignment</h2>
+			
 			<p> A basic way to align the images is to use a single-scale approach in which we shift the entire color channels across a range of offsets (+ or - 15 pixels)and compute a difference metric
 				to determine which of the tested offsets have the best alignment. This metric can be computed in a few different ways, including using the L2 norm and Normalized Cross-Correlation.
 				L2 norm, or Euclidean Difference, measures the difference between each pixel value in the two images and sums the squared differences, and finally takes the square root of the sum. The best 
-				alignment the L2 norm is the one that minimizes this calculated value. Normalized Cross-Correlation normalizes both images to have zero mean and a variance of one, which ensures that different lighting conditions do not affect the
-				comparison method. Then, the metric is calculated by summing the pixel-wise products of the two images. The calculated metric is the normalized cross-correlation between the two images, so higher calcualted values 
+				alignment the L2 norm is the one that minimizes this calculated value. Normalized Cross-Correlation normalizes both images to have zero mean by subtracting the overall image mean from each pixel value, and divides by each of the L2 norms, and multiplies these products with each other to calculate correlation. This method ensures that different lighting conditions do not affect the
+				comparison method. The calculated metric is the normalized cross-correlation between the two images, so higher calcualted values 
 				mean better alignment with NCC. In this project, I used NCC due to its reliability across different lighting conditions. For these images, the offsets calculated 
 				using NCC and L2 norm were identical, so I only present the results of NCC in this section.
 
-				To avoid calculations being skewed by the edges of the image, which may contain artifacts, I cropped the sides of the images before computing the difference metric.
-				Below are the results of single-scale alignment.
+				To avoid calculations being skewed by the edges of the image, which may contain more artifacts, I cropped the sides of the images before computing the difference metric. Since we are just computing offsets, this cropping will not affect the final 
+				image as we will simply shift the full-size image by the returned offsets. Below are the results of single-scale alignment.
 			</p>
 
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -73,11 +74,11 @@
 				</td>
 				<td style="text-align: center;">
 				  <img src="images/singleNCCMonastery.jpg" width="400px"/>
-				  <figcaption>Monastery (g offset: (-3,2), r offset: (3,2))</figcaption>
+				  <figcaption>Monastery (g offset: (-3,2), r offset: (3,3))</figcaption>
 				</td>
 				<td style="text-align: center;">
 				  <img src="images/singleNCCTobolsk.jpg" width="400px"/>
-				  <figcaption>Tobolsk (g offset: (3,3), r offset: (6,3))</figcaption>
+				  <figcaption>Tobolsk (g offset: (3,3), r offset: (7,4))</figcaption>
 				</td>
 			  </tr>
 			  
@@ -99,47 +100,61 @@
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="images/churchFixed.tif" width="400px"/>
-							<figcaption>Church (g: (25, 4), r: (58,-4))</figcaption>
-						</td>
-						<td style="text-align: center;"> TO DO NOT DONE YET
-							<img src="images/emirFixed.tif" width="400px"/>
-							<figcaption>Emir (g: (49, 24), r: (106, 41))</figcaption>
+							<img src="images/singleNCCCathedral.jpg" width="400px"/>
+							<figcaption>Cathedral (g offset: (5,2), r offset: (12,3))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/harvestersFixed.tif" width="400px"/>
+							<img src="images/singleNCCMonastery.jpg" width="400px"/>
+							<figcaption>Monastery (g offset: (-3,2), r offset: (3,3))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/singleNCCTobolsk.jpg" width="400px"/>
+							<figcaption>Tobolsk (g offset: (3,3), r offset: (7,4))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/church.jpg" width="400px"/>
+							<figcaption>Church (g: (25, 4), r: (58,-4))</figcaption>
+						</td>
+						<td style="text-align: center;"> 
+							<img src="images/emir.jpg" width="400px"/>
+							<figcaption>Emir of Bukhara (g: (49, 24), r: (106, 41))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/harvesters.jpg" width="400px"/>
 							<figcaption>Harvesters (g: (60, 17), r: (125, 14))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/iconFixed.tif" width="400px"/>
+							<img src="images/icon.jpg" width="400px"/>
 							<figcaption>Icon (g: (41, 17), r: (89, 22))</figcaption>
 						</td>
+					</tr>
+					<tr>	
 						<td style="text-align: center;">
-							<img src="images/ilemselgaFixed.tif" width="400px"/>
+							<img src="images/ilemselga.jpg" width="400px"/>
 							<figcaption>Ilemselga (g: (40, 7), r: (131, 11))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/melonsFixed.tif" width="400px"/>
+							<img src="images/melons.jpg" width="400px"/>
 							<figcaption>Melons (g: (82, 11), r: (178, 15))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/religous_paintingFixed.tif" width="400px"/>
+							<img src="images/religous_painting.jpg" width="400px"/>
 							<figcaption>Religious Painting (g: (28, 3), r: (69, 7))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/self_portraitFixed.tif" width="400px"/>
+							<img src="images/self_portrait.jpg" width="400px"/>
 							<figcaption>Self Portrait (g: (79, 29), r: (177,37))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/sirenFixed.tif" width="400px"/>
+							<img src="images/siren.jpg" width="400px"/>
 							<figcaption>Siren (g: (49, -6), r: (96,-24))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/three_generationsFixed.tif" width="400px"/>
+							<img src="images/three_generations.jpg" width="400px"/>
 							<figcaption>Three Generations (g: (53,14), r: (111,11))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/wharfFixed.tif" width="400px"/>
+							<img src="images/wharf.jpg" width="400px"/>
 							<figcaption>Wharf (g: (15, -7), r: (82,-16))</figcaption>
 						</td>
 						
@@ -147,19 +162,68 @@
 				</table>
 			</div>
 
-			<h2>Chasing Emir</h2>
-			<p>
-				Initially, I had been using the starter-code that aligned the green channel to the blue channel, and then the red channel to the blue channel. This worked almost perfectly for all of the images,
-				with the sole exception of the Emir of Bukhara. The initial tests of 
-		</p>
 			
+			
+			<h2>Self-chosen images from the Prokudin-Gorskii Collection</h2>
+
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="images/t3.gif" width="400px"/>
-							<figcaption>Dolly Zoom</figcaption>
+							<img src="images/zbashkir_dog.jpg" width="400px"/>
+							<figcaption>Bashkir Dog (g: (61, 8), r: (137, 7))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/zboat.jpg" width="400px"/>
+							<figcaption>Boat (g: (42, 39), r: (134, 81))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/ztree.jpg" width="400px"/>
+							<figcaption>Tree (g: (59, 36), r: (132, 58))</figcaption>
 						</td>
 					</tr>
 				</table>
 			</div>
+
+			<h2>Chasing the Emir of Bukhara</h2>
+			<p>
+				Initially, I had been using the starter-code that aligned the green channel to the blue channel, and then the red channel to the blue channel. This worked almost perfectly for all of the images,
+				with the sole exception of the Emir of Bukhara. The initial tests on the Emir of Bukhara is shown in (1). I tried many different parameters, changing the base case size, base case window, the downsampling factor, 
+				and the intermediate windows, to search across more offsets. One of my tests was close, but it was still the same as the "not ok" example so was unsatisfactory. In the project specifications, it was mentioned that 
+				our default metrics like NCC might not work when the pixel values were different between channels. Hence, I suspected there was a fundamental issue with how I was searching rather than the size of the search.
+				Throughout my tests, I realized that the green and blue channels always seemed to be aligned so I rendered the image without red to confirm my observation, which is show in (2). When reviewing the template 
+				code given, I saw red was being aligned to the blue channel, which evidently was not working.  This led me to the idea that perhaps there was more variance between the red and blue channels than between the green and blue channels. 
+				Remembering some of the slides from lecture, this might make sense as the red and blue wavelengths are on opposite ends of the visible light spectrum, meaning there would likely be less overlap in the light captured for each of the channels (3).
+				Returning to the idea that our difference metric is searching based on the assumption that pixel values across different channels are similar, it would be logical to try to make the pixel values as similar as possible across channels 
+				to make our alignment metric more accurate. Aligning red with an aligned green, instead of blue, would hopefully achieve this goal more effectively than comparing red with blue, as green and red are much closer to each other on 
+				the visible spectrum in terms of wavelength. Making this tiny change completely fixed my algorithm, and enabled the same parameters that worked on all the other images to work on the Emir of Bukhara! For consistency, I re-ran all 
+				my other images through this new alignment order and used these new offsets. Sometimes they would different by a single pixel from the old offsets, and this likely has to do with the limits of a translation-only alignment. Between the 
+				old alignment order and new one, some parts become less aligned while others become more, and this implies we need scale or rotation to find the best alignment.
+				
+				Note: I aligned the red to the aligned green rather than using green as the anchor for both to be able to keep the green and red offsets for the sake of the assignment (instead of having blue and red offsets).
+			</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="images/emirOld.jpg" width="400px"/>
+							<figcaption>(1) Emir of Bukhara Wrong </figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/emirGB.jpg" width="400px"/>
+							<figcaption>(2) Emir of Bukhara (green and blue) </figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/wavelengths.png" width="400px"/>
+							<figcaption>(3) Wavelengths diagram from lecture</figcaption>
+						</td>
+						<td style="text-align: center;"> 
+							<img src="images/emir.jpg" width="400px"/>
+							<figcaption>Emir of Bukhara Fixed </figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+
