@@ -42,7 +42,7 @@
 				to determine which of the tested offsets have the best alignment. This metric can be computed in a few different ways, including using the L2 norm and Normalized Cross-Correlation.
 				L2 norm, or Euclidean Difference, measures the difference between each pixel value in the two images and sums the squared differences, and finally takes the square root of the sum. The best 
 				alignment the L2 norm is the one that minimizes this calculated value. Normalized Cross-Correlation normalizes both images to have zero mean and a variance of one, which ensures that different lighting conditions do not affect the
-				comparison method. Then, the metric is calculated by summing the pixel-wise products of the two images. The calculated metric is the correlation between the two images, so higher calcualted values 
+				comparison method. Then, the metric is calculated by summing the pixel-wise products of the two images. The calculated metric is the normalized cross-correlation between the two images, so higher calcualted values 
 				mean better alignment with NCC. In this project, I used NCC due to its reliability across different lighting conditions. For these images, the offsets calculated 
 				using NCC and L2 norm were identical, so I only present the results of NCC in this section.
 
@@ -73,7 +73,7 @@
 				</td>
 				<td style="text-align: center;">
 				  <img src="images/singleNCCMonastery.jpg" width="400px"/>
-				  <figcaption>Monastery (g offset: (-3,3), r offset: (3,2))</figcaption>
+				  <figcaption>Monastery (g offset: (-3,2), r offset: (3,2))</figcaption>
 				</td>
 				<td style="text-align: center;">
 				  <img src="images/singleNCCTobolsk.jpg" width="400px"/>
@@ -84,24 +84,74 @@
 			</table>
 		</div>
 		
-		<h2>Part 2: Architectural Perspective Compression</h2>
+		<h2>Part 2: Multi-Scale Alignment</h2>
+
+		<p>Single-scale alignment works well for small images, as the range over which we test offsets accounts for 
+			a decent percentage of the image (30 pixel-range for a 300 pixel-wide image is 10% of the image width). However, for larger images, this range is a much smaller 
+			percentage of the image width, and most likely will not search enough offsets to find the best one as the misalignment is too large. Hence, we must find a way to narrow our search window so that we do not need to iterate over a huge window. We can do this 
+			through downsampling the image to make it a smaller size. Then, we can run our single-scale alignment on the downsampled image to find a good offset for the downsampled image. Then, use the offset of this downsampled image to 
+			find a smaller range of offsets to test on the full-size image. To make this more effective, I had this process run recursively where I continued downsampled until I reached a base case
+			where the images were in a viable size for single-scale alignment. Through each iteration, you can test a range based off the recursive call below it as it will return an estimate offset. This will continuously 
+			pass up a range of offsets to keep testing optimal offsets until we eventually reach the full-resulution to test the image on. 
+		</p>
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="images/t2_far.JPG" width="400px"/>
-							<figcaption>Far image</figcaption>
+							<img src="images/churchFixed.tif" width="400px"/>
+							<figcaption>Church (g: (25, 4), r: (58,-4))</figcaption>
+						</td>
+						<td style="text-align: center;"> TO DO NOT DONE YET
+							<img src="images/emirFixed.tif" width="400px"/>
+							<figcaption>Emir (g: (49, 24), r: (106, 41))</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/t2_close.JPG" width="400px"/>
-							<figcaption>Close image</figcaption>
+							<img src="images/harvestersFixed.tif" width="400px"/>
+							<figcaption>Harvesters (g: (60, 17), r: (125, 14))</figcaption>
 						</td>
+						<td style="text-align: center;">
+							<img src="images/iconFixed.tif" width="400px"/>
+							<figcaption>Icon (g: (41, 17), r: (89, 22))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/ilemselgaFixed.tif" width="400px"/>
+							<figcaption>Ilemselga (g: (40, 7), r: (131, 11))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/melonsFixed.tif" width="400px"/>
+							<figcaption>Melons (g: (82, 11), r: (178, 15))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/religous_paintingFixed.tif" width="400px"/>
+							<figcaption>Religious Painting (g: (28, 3), r: (69, 7))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/self_portraitFixed.tif" width="400px"/>
+							<figcaption>Self Portrait (g: (79, 29), r: (177,37))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/sirenFixed.tif" width="400px"/>
+							<figcaption>Siren (g: (49, -6), r: (96,-24))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/three_generationsFixed.tif" width="400px"/>
+							<figcaption>Three Generations (g: (53,14), r: (111,11))</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="images/wharfFixed.tif" width="400px"/>
+							<figcaption>Wharf (g: (15, -7), r: (82,-16))</figcaption>
+						</td>
+						
 					</tr>
 				</table>
 			</div>
 
-			<h2>Part 3: The Dolly Zoom</h2>
+			<h2>Chasing Emir</h2>
+			<p>
+				Initially, I had been using the starter-code that aligned the green channel to the blue channel, and then the red channel to the blue channel. This worked almost perfectly for all of the images,
+				with the sole exception of the Emir of Bukhara. The initial tests of 
+		</p>
 			
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
