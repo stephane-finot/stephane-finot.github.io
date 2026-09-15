@@ -67,7 +67,7 @@ git status
 				  <img src="images/notobolsk.jpg" width="400px"/>
 				  <figcaption>Tobolsk with no alignment</figcaption>
 				</td>
-			  </tr>
+				</tr>
 			  <tr>
 				<td style="text-align: center;">
 				  <img src="images/cathedral.jpg" width="400px"/>
@@ -112,6 +112,8 @@ git status
 							<img src="images/tobolsk.jpg" width="400px"/>
 							<figcaption>Tobolsk (g offset: (3,3), r offset: (7,4))</figcaption>
 						</td>
+					</tr>
+			 		<tr>
 						<td style="text-align: center;">
 							<img src="images/church.jpg" width="400px"/>
 							<figcaption>Church (g: (25, 4), r: (58,-4))</figcaption>
@@ -124,12 +126,12 @@ git status
 							<img src="images/harvesters.jpg" width="400px"/>
 							<figcaption>Harvesters (g: (60, 17), r: (125, 14))</figcaption>
 						</td>
+					</tr>
+			  		<tr>
 						<td style="text-align: center;">
 							<img src="images/icon.jpg" width="400px"/>
 							<figcaption>Icon (g: (41, 17), r: (89, 22))</figcaption>
-						</td>
-					</tr>
-					<tr>	
+						</td>	
 						<td style="text-align: center;">
 							<img src="images/ilemselga.jpg" width="400px"/>
 							<figcaption>Ilemselga (g: (40, 7), r: (131, 11))</figcaption>
@@ -138,6 +140,8 @@ git status
 							<img src="images/melons.jpg" width="400px"/>
 							<figcaption>Melons (g: (82, 11), r: (178, 15))</figcaption>
 						</td>
+					</tr>
+			 		<tr>
 						<td style="text-align: center;">
 							<img src="images/religous_painting.jpg" width="400px"/>
 							<figcaption>Religious Painting (g: (28, 3), r: (69, 7))</figcaption>
@@ -150,6 +154,8 @@ git status
 							<img src="images/siren.jpg" width="400px"/>
 							<figcaption>Siren (g: (49, -6), r: (96,-24))</figcaption>
 						</td>
+					</tr>
+			  		<tr>
 						<td style="text-align: center;">
 							<img src="images/three_generations.jpg" width="400px"/>
 							<figcaption>Three Generations (g: (53,14), r: (111,11))</figcaption>
@@ -197,10 +203,12 @@ git status
 				Remembering some of the slides from lecture, this might make sense as the red and blue wavelengths are on opposite ends of the visible light spectrum, meaning there would likely be less overlap in the light captured for each of the channels (3).
 				Returning to the idea that our difference metric is searching based on the assumption that pixel values across different channels are similar, it would be logical to try to make the pixel values as similar as possible across channels 
 				to make our alignment metric more accurate. Aligning red with an aligned green, instead of blue, would hopefully achieve this goal more effectively than comparing red with blue, as green and red are much closer to each other on 
-				the visible spectrum in terms of wavelength. Making this tiny change completely fixed my algorithm, and enabled the same parameters that worked on all the other images to work on the Emir of Bukhara! For consistency, I re-ran all 
-				my other images through this new alignment order and used these new offsets. Sometimes they would different by a single pixel from the old offsets, and this likely has to do with the limits of a translation-only alignment. Between the 
+				the visible spectrum in terms of wavelength. Making this tiny change completely fixed my algorithm, and enabled the same parameters that worked on all the other images to work on the Emir of Bukhara! 
+				</p>
+				<p>
+				For consistency, I re-ran all my other images through this new alignment order and used these new offsets. Sometimes they would different by a single pixel from the old offsets, and this likely has to do with the limits of a translation-only alignment. Between the 
 				old alignment order and new one, some parts become less aligned while others become more, and this implies we need scale or rotation to find the best alignment.
-				
+				</p><p>
 				Note: I aligned the red to the aligned green rather than using green as the anchor for both to be able to keep the green and red offsets for the sake of the assignment (instead of having blue and red offsets).
 			</p>
 
@@ -208,19 +216,19 @@ git status
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="images/emirOld.jpg" width="400px"/>
+							<img src="images/emirOld.jpg" width="200px"/>
 							<figcaption>(1) Emir of Bukhara Wrong </figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/emirGB.jpg" width="400px"/>
+							<img src="images/emirGB.jpg" width="200px"/>
 							<figcaption>(2) Emir of Bukhara (green and blue) </figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="images/wavelengths.png" width="400px"/>
+							<img src="images/wavelengths.png" width="300px"/>
 							<figcaption>(3) Wavelengths diagram from lecture</figcaption>
 						</td>
 						<td style="text-align: center;"> 
-							<img src="images/emir.jpg" width="400px"/>
+							<img src="images/emir.jpg" width="200px"/>
 							<figcaption>Emir of Bukhara Fixed </figcaption>
 						</td>
 					</tr>
