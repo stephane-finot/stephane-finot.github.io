@@ -51,7 +51,7 @@
                 was significantly faster (rounded to 0.0s) than both of my implementations. The specific parameters were scipy.signal.convolve2d(im, blurKernel9, mode='same', boundary='fill', fillvalue=0) 
                 which fills the boundaries with 0s, mirroring my implemented padding.
             </p>
-            <p> The original for loops are using a 9x9 box filter. The finite difference filters were defined by Dx = [1, 0, -1] and Dy = [1, 0, -1]t which is transposed so that its a vertical kernel.
+            <p> The first set of images are using a 9x9 box filter. The finite difference filters were defined by Dx = [1, 0, -1] and Dy = [1, 0, -1]t which is transposed so that its a vertical kernel.
             </p>
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
