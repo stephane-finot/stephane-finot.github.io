@@ -341,7 +341,7 @@
                 Since we blurred the mask as well in a gaussian stack, the mask gets smoother across the lower levels. 
                 This creates a smooth blend as we weigh across levels, with a sharper blend for more fine details and coarser blend for more coarse details.
                 To create the blended image, adding the laplacian stack to the lowest gaussian level results in the original image. So we 
-                add the lowest gaussian masked level of each image, and add all of the laplacian levels to reconstruct the full image. I used the lowest 
+                add the lowest gaussian masked level of each image, and add all of the masked laplacian levels to reconstruct the full image. I used the lowest 
                 mask level for the gaussian level as well.
         </p>
 			<div style="display: flex; flex-direction: column; align-items: center;">
@@ -378,9 +378,9 @@
                         <td style="text-align: center;"><img src="images/2x4mergedHeart.jpg" width="300px"/><figcaption>Blended</figcaption></td>
 					</tr>
                     <tr>
-						<td style="text-align: center;"><img src="images/2x4Water.jpeg" width="300px"/><figcaption>Image 1</figcaption></td>
-                        <td style="text-align: center;"><img src="images/2x4Fire.jpeg" width="300px"/><figcaption>Image 2</figcaption></td>
-                        <td style="text-align: center;"><img src="images/2x4mergedFire.jpg" width="300px"/><figcaption>Merged</figcaption></td>
+						<td style="text-align: center;"><img src="images/2x4pizza.jpg" width="300px"/><figcaption>Image 1</figcaption></td>
+                        <td style="text-align: center;"><img src="images/2x4earth.jpg" width="300px"/><figcaption>Image 2</figcaption></td>
+                        <td style="text-align: center;"><img src="images/2x4mergedEarth.jpg" width="300px"/><figcaption>Merged</figcaption></td>
 					</tr>
 				</table>
 			</div>
