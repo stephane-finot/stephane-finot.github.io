@@ -1,15 +1,15 @@
 <html>
 	<head>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 		<style>
+            pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
 			h1 {
 				text-align: center;
 			}
 
 			.container {
 				margin: 0 auto;
-				padding: 60px 20%;
+                padding: 60px 5%;
 			}
 
 			figure {
@@ -22,6 +22,8 @@
 			}
 			img {
 				display: inline-block;
+                max-width: 100%;
+                height: auto;
 			}
 
 			body {
@@ -82,24 +84,21 @@
                                 for j in range(-(kernel.shape[1]//2), (kernel.shape[1]//2) + 1): 
                                     nx, ny = r + i, c + j
                                     if 0 <= nx < height and 0 <= ny < width:
-                                        currTotal += image[nx][ny] * kernelFlipped[i +
-                                         (kernel.shape[0]//2)][j + (kernel.shape[1]//2)]
+                                        currTotal += image[nx][ny] * kernelFlipped[i + (kernel.shape[0]//2)][j + (kernel.shape[1]//2)]
                             newImage[r][c] = currTotal
                 return newImage
 
             def convolution2loops(image, kernel):
                 image = np.asarray(image, dtype=np.float32)
                 kernel = np.asarray(kernel, dtype=np.float32)
-                oldImagePadded = np.pad(image, ((kernel.shape[0]//2, kernel.shape[0]//2), 
-                                                (kernel.shape[1]//2, kernel.shape[1]//2)))
+                oldImagePadded = np.pad(image, ((kernel.shape[0]//2, kernel.shape[0]//2), (kernel.shape[1]//2, kernel.shape[1]//2)))
                 newImage = np.zeros((image.shape[0], image.shape[1]), dtype=np.float32)
                 height = image.shape[0]
                 width = image.shape[1]
                 kernelFlipped = kernel[::-1, ::-1] #flipped
                 for r in range(height):
                         for c in range(width):
-                            newImage[r][c] = np.sum(kernelFlipped * oldImagePadded[r:r + 
-                                                    kernel.shape[0], c:c + kernel.shape[1]])
+                            newImage[r][c] = np.sum(kernelFlipped * oldImagePadded[r:r + kernel.shape[0], c:c + kernel.shape[1]])
                 return newImage
             </code></pre>
 
@@ -268,7 +267,7 @@
 						<td style="text-align: center;">
                         <img
                             src="images/2x2finalcat.jpg"
-                            style="width: 400px; height: 550; object-fit: cover; object-position: center bottom;"
+                            style="width: 400px; height: 550px; object-fit: cover; object-position: center bottom;"
                         />
                         <figcaption>Hybrid Image</figcaption>
                         </td>
@@ -279,7 +278,7 @@
 						<td style="text-align: center;">
                         <img
                             src="images/2x2finalhand.jpg"
-                            style="width: 400px; height: 550; object-fit: cover; object-position: center top;"
+                            style="width: 400px; height: 550px; object-fit: cover; object-position: center top;"
                         />
                         <figcaption>Hybrid Image</figcaption>
                         </td>
