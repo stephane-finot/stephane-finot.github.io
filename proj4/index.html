@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Project 4: Image Warping and Mosaicing</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+	<style>
+		body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #32323a; background: #ffffff; margin: 0; }
+		.container { max-width: 1100px; margin: 0 auto; padding: 48px 20px 80px; }
+		h1 { text-align: center; margin-bottom: 4px; }
+		.byline { text-align: center; color: #6b6b75; margin-bottom: 24px; }
+		h2 { border-bottom: 1px solid #e4e4ea; padding-bottom: 6px; margin-top: 56px; }
+		h3 { margin-top: 36px; }
+		p, ul, ol { max-width: 850px; }
+		a { color: #0057A8; text-decoration: none; }
+		a:hover { color: #8E018E; text-decoration: underline; }
+		figure { margin: 16px 0; text-align: center; }
+		figure img { max-width: 100%; height: auto; border-radius: 4px; }
+		figcaption { font-size: 14px; color: #6b6b75; margin-top: 6px; }
+		.row { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: flex-end; }
+		.row figure { flex: 1 1 300px; }
+		pre { background: #f6f6f9; border: 1px solid #e4e4ea; border-radius: 6px; padding: 12px 14px; font-size: 13px; overflow-x: auto; max-width: 850px; }
+	</style>
+</head>
+<body>
+<div class="container">
+	<h1>Project 4: Image Warping and Mosaicing</h1>
+	<div class="byline">By: Stephane Finot</div>
+
+	<!-- ============================ PART A ============================ -->
+	<h2 id="partA">Part A: Image Warping and Mosaicing</h2>
+	
+	<h3>A.1 Shoot the Pictures</h3>
+	<p>This project focuses on warping images, for the eventual goal of creating panoramas from different images.
+		For this to work effectively, I needed to take images where the Center of Projection is fixed, but the camera is 
+		rotated. 
+</p>
+		<p>Something that helped with gathering these images was specifically rotating around the camera on my phone (rather 
+			than just the center of mass of the phone). Also, to ensure stitching is smooth, I locked the exposure and focus 
+			so that the automatic adjustments from the iPhone camera do not change the coloring of the image as I rotate to 
+			different views.
+	</p>
+	<div class="row">
+		<figure><img src="images/m1l.jpg"><figcaption>Mosaic 1 (Memorial Glade): left</figcaption></figure>
+		<figure><img src="images/m1r.jpg"><figcaption>Mosaic 1: right</figcaption></figure>
+	</div>
+	<div class="row">
+		<figure><img src="images/m2l.jpg"><figcaption>Mosaic 2 (rooftops): left</figcaption></figure>
+		<figure><img src="images/m2r.jpg"><figcaption>Mosaic 2: right</figcaption></figure>
+	</div>
+	<div class="row">
+		<figure><img src="images/m3l.jpg"><figcaption>Mosaic 3 (Sproul Plaza at night): left</figcaption></figure>
+		<figure><img src="images/m3r.jpg"><figcaption>Mosaic 3: right</figcaption></figure>
+	</div>
+
+	<h3>A.2 Recover Homographies</h3>
+	<p>A homography is a transformation matrix used to map a point in one image plane to another.
+		Formally, we can view this as a map for point p in im1 to p' in im2 and p' = Hp. 
+		The homography matrix H is 3×3. Due to the method of calculation, scales do not affect the 
+		final output so we lose one degree of freedom. Even though there are 9 variables, we only need 8 variables
+		to define a homography matrix.</p>
+	<pre><code>[w * x']   [a b c] [x]
+[w * y'] = [d e f] [y]
+[ w  ]   [g h 1] [1]</code></pre>
+	<p>After you divide by w and multiply out the denominator, we get two linear equations from each point (one for x' and one for y'):</p>
+	<pre><code>[x  y  1  0  0  0  -x x'  -y x'] [a b c d e f g h]ᵀ = x'
+[0  0  0  x  y  1  -x y'  -y y'] [a b c d e f g h]ᵀ = y'</code></pre>
+	
+<p>We get our data points by selecting corresponding points in the two images. For example, the same corner of a building 
+	would represent p and p'.
+	Even though we only have 8 degrees of freedom, and therefore in theory only need 8 data points (or 4 corresponding points, each with an x and y) 
+there is some human error when selecting our corresponding points. Hence, it's more effective in practice to select many points, 
+and least squares finds the H that minimizes the sum of squared errors over all points. </p>
+	
+	<p>I used <a href="https://cal-cs180.github.io/fa23/hw/proj3/tool.html">this tool</a> to select the points.</p>
+	<figure><img src="images/m1_points.jpg"><figcaption>Mosaic 1 correspondences (11 points)</figcaption></figure>
+	<figure><img src="images/m2_points.jpg"><figcaption>Mosaic 2 correspondences (11 points)</figcaption></figure>
+	<figure><img src="images/m3_points.jpg"><figcaption>Mosaic 3 correspondences (21 points)</figcaption></figure>
+	<p>The notebook prints the full A and b for each mosaic. The recovered H matrices (left → right) are:</p>
+	<pre><code>Mosaic 1
+[[ 1.9376e+00 -1.1438e-01 -1.5332e+03]
+ [ 4.5559e-01  1.6097e+00 -7.9210e+02]
+ [ 3.8790e-04  4.3753e-06  1.0000e+00]]
+
+Mosaic 2
+[[ 2.0644e+00 -2.5916e-02 -1.9515e+03]
+ [ 4.0229e-01  1.7253e+00 -6.6548e+02]
+ [ 4.3326e-04  3.7123e-06  1.0000e+00]]
+
+Mosaic 3
+[[ 1.7007e+00 -9.3786e-02 -1.2109e+03]
+ [ 3.4377e-01  1.4132e+00 -4.6767e+02]
+ [ 2.9768e-04 -2.1128e-05  1.0000e+00]]</code></pre>
+
+	<h3>A.3 Warp the Images</h3>
+	<p> Now we'll warp the images to be able to match our images.
+		To start with a simpler case, we'll just warp a painting seen from an angle to get the projective view 
+		from straight on. This we can cleanly use just 4 points for the 4 corners, and the corresponding points will be 
+		a manually defined rectangle.
+		Firstly we multiply our four corners by our homography matrix to get the shape of the output image. Then, for 
+		each pixel in this output bounding box, we'll apply H⁻¹ and divide by w to see where it originates from the original 
+		image. 
+		
+	</p><p>If the inverse of a pixel in the bounding box is outside our original image, we can just set it to black. However,
+		it gets more complicated when we think about interpolations when our calculated positions do not land exactly on a pixel.
+		Nearest neighbor simply takes the nearest pixel and sets the output pixel to that value. However, this can cause aliasing.
+		A more effective method is bilinear sampling where we linearly interpolate between the four nearest pixels to 
+		calculate a more accurate value for the output pixel.</p>
+	<h3>Rectification</h3>
+	<p>See tests below. I manually defined the painting to be roughly 1000 × 750 and the sign to be 400 × 800 for the sake 
+		of calculating the homographies.</p>
+
+	<div class="row">
+		<figure><img src="images/r1.jpg"><figcaption>Original painting</figcaption></figure>
+		<figure><img src="images/r2.jpg"><figcaption>Original sign</figcaption></figure>
+	</div>
+	<div class="row">
+		<figure><img src="images/r1_nn.jpg"><figcaption>Painting: nearest neighbor</figcaption></figure>
+		<figure><img src="images/r1_bilinear.jpg"><figcaption>Painting: bilinear</figcaption></figure>
+	</div>
+	<div class="row">
+		<figure><img src="images/r2_nn.jpg"><figcaption>Sign: nearest neighbor</figcaption></figure>
+		<figure><img src="images/r2_bilinear.jpg"><figcaption>Sign: bilinear</figcaption></figure>
+	</div>
+	<div class="row">
+		<figure><img src="images/r1.jpg"><figcaption>Original painting</figcaption></figure>
+		<figure><img src="images/r1_nn_crop.jpg"><figcaption>Painting cropped: nearest neighbor</figcaption></figure>
+		<figure><img src="images/r1_bilinear_crop.jpg"><figcaption>Painting cropped: bilinear</figcaption></figure>
+	</div>
+	<div class="row">
+		<figure><img src="images/r2.jpg"><figcaption>Original sign</figcaption></figure>
+		<figure><img src="images/r2_nn_crop.jpg"><figcaption>Sign cropped: nearest neighbor</figcaption></figure>
+		<figure><img src="images/r2_bilinear_crop.jpg"><figcaption>Sign cropped: bilinear</figcaption></figure>
+	</div>
+	<p>The painting and the sign now look as if they were seen from head on.</p>
+
+	<h3>Nearest Neighbor vs. Bilinear</h3>
+	<figure><img src="images/r1_zoom.jpg"><figcaption>Zoomed in on the painting output: nearest neighbor (left), bilinear (right)</figcaption></figure>
+	<figure><img src="images/r2_zoom.jpg"><figcaption>Zoomed in on the sign output: nearest neighbor (left), bilinear (right)</figcaption></figure>
+	<p>Nearest neighbor does one sample to the nearest pixel.
+		Bilinear does 4 samples to the 4 closest pixels plus the calculation using the weights, so it takes a bit longer to run.
+		The nearest neighbor process looks more jagged because it just takes the nearest pixel rather than accounting for the surrounding pixels.
+		Bilinear on the other hand takes into account the 4 surrounding pixels, so it results in a much smoother output as edges 
+		have smoother gradients if a sampled pixel lands between two pixels in the original.
+	There is the most difference between nearest neighbor and bilinear in the areas that are most stretched, as there is the most 
+aliasing there. </p>
+
+	<h3>A.4 Blend the Images into a Mosaic</h3>
+	<p>To blend the two images I can warp the left photo into its projection with the homography calculation 
+		from the photo warping portion, and just lay that on the right photo that stays in its original position.
+		Procedure:</p>
+	<ol>
+		<li><b>Alpha:</b> Calculate the alpha of the given image by measuring the distance of a given pixel from its 
+			nearest edge. This is scaled so it is 1 at the center and falls off linearly to 0 at the edges.</li>
+		<li><b>Warp:</b> warp the left image using the bilinear filtering method described above, along with its 
+			alpha as a 4th channel, onto the right photo. The alpha channel along with this warp 
+			will help with the final stitching. </li>
+		<li><b>Calculate Size:</b> Similar to the rectification step, send the corners of the left photo through the homography 
+			to get the bounding box of the composite image (also taking into account the right photo's corners for the 
+			overall calculation of the bounding box).</li>
+		<li><b>Place:</b> put both 4-channel images into that box.</li>
+		<li><b>Weighted average:</b> blend every pixel = (left color × left alpha + right color × right alpha) / (left alpha + right alpha).</li>
+	</ol>
+	<p>This calculation and dividing by the total left and right alpha ensures that every output pixel is 
+		at alpha 1, however, it still mixes when there are overlaps. Divide by one if there is no alpha just to avoid 
+	division by zero errors.</p>
+
+	<div class="row">
+		<figure><img src="images/m1l.jpg"><figcaption>Mosaic 1 source: left</figcaption></figure>
+		<figure><img src="images/m1r.jpg"><figcaption>Mosaic 1 source: right</figcaption></figure>
+	</div>
+	<figure><img src="images/m1_mosaic.jpg"><figcaption>Mosaic 1: Memorial Glade</figcaption></figure>
+
+	<div class="row">
+		<figure><img src="images/m2l.jpg"><figcaption>Mosaic 2 source: left</figcaption></figure>
+		<figure><img src="images/m2r.jpg"><figcaption>Mosaic 2 source: right</figcaption></figure>
+	</div>
+	<figure><img src="images/m2_mosaic.jpg"><figcaption>Mosaic 2: rooftops</figcaption></figure>
+
+	<div class="row">
+		<figure><img src="images/m3l.jpg"><figcaption>Mosaic 3 source: left</figcaption></figure>
+		<figure><img src="images/m3r.jpg"><figcaption>Mosaic 3 source: right</figcaption></figure>
+	</div>
+	<figure><img src="images/m3_mosaic.jpg"><figcaption>Mosaic 3: Sproul Plaza at night</figcaption></figure>
+
+	<p>With the weighted average, we can have a clean transition. There is some ghosting in some areas, due to 
+		manual error when placing the points, or subjects moving between the two images like pedestrians. 
+		Ghosting due to manual error is most evident in high frequency regions where single pixel 
+		offsets are visible, like very thin lines or the grass in the Memorial Glade. Having correspondence points 
+		in a given area makes that area line up better, but it was hard to find correspondence points in the grass 
+	of Memorial Glade which is why there is more ghosting there, but the buildings were easy to find points for so they 
+are well aligned.</p>
+
+</div>
+</body>
+</html>
